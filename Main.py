@@ -16,20 +16,8 @@ def key_phrases(doc):
     client = authenticateClient();
 
     try:
-        documents = doc
-
-        for document in documents:
-            print(
-                "Asking key-phrases on '{}' (id: {})".format(document['text'], document['id']))
-
-        response = client.key_phrases(documents=documents)
-
-        for document in response.documents:
-            print("Document Id: ", document.id)
-            print("\tKey Phrases:")
-            for phrase in document.key_phrases:
-                print("\t\t", phrase)
-
+        response = client.key_phrases(documents=doc)
+        return response.documents
     except Exception as err:
         print("Encountered exception. {}".format(err))
 
@@ -76,36 +64,79 @@ def OCR2KeyPhrasesReFormatter(OCRout):
     outputString = ""
     resp_dict = json.loads(OCRout)
     temp = ConvertToJSON(resp_dict.get('regions'))
-    temp = temp[1:-1]
-    resp_dict = json.loads(temp)
-    temp = resp_dict.get('lines')
-    endPosOfLastLine = None
+    print(temp)
     id = 0;
-    for str in temp:
-        singleLine = json.loads(ConvertToJSON(str))
-        words = singleLine.get('words')
-        PosOfTheFirst = json.loads(ConvertToJSON(words[0])).get('boundingBox').split(",")
-        if endPosOfLastLine == None or inTheSameParagraph(endPosOfLastLine,PosOfTheFirst):
-            for word in words:
-                wordJSON = json.loads((ConvertToJSON(word)))
-                text = wordJSON.get('text')
-                outputString += text + " "
-            endPosOfLastLine = json.loads(ConvertToJSON(words[len(words)-1])).get('boundingBox').split(",")
-        else:
-            temp = json.dumps({'id': id, 'language': 'en', 'text':outputString})
-            outputBuffer.append(json.loads(temp))
-            id += 1
-            outputString = ""
-            for word in words:
-                wordJSON = json.loads((ConvertToJSON(word)))
-                text = wordJSON.get('text')
-                outputString += text + " "
-            endPosOfLastLine = json.loads(ConvertToJSON(words[len(words)-1])).get('boundingBox').split(",")
-    temp = json.dumps({'id': id, 'language': 'en', 'text': outputString})
-    outputBuffer.append(json.loads(temp))
+
+    resp_dict = json.loads(temp)
+    for JSONObj in resp_dict:
+        temp = JSONObj.get('lines')
+        endPosOfLastLine = None
+
+        for str in temp:
+            singleLine = json.loads(ConvertToJSON(str))
+            words = singleLine.get('words')
+            PosOfTheFirst = json.loads(ConvertToJSON(words[0])).get('boundingBox').split(",")
+            if endPosOfLastLine == None or inTheSameParagraph(endPosOfLastLine,PosOfTheFirst):
+                for word in words:
+                    wordJSON = json.loads((ConvertToJSON(word)))
+                    text = wordJSON.get('text')
+                    outputString += text + " "
+                endPosOfLastLine = json.loads(ConvertToJSON(words[len(words)-1])).get('boundingBox').split(",")
+            else:
+                temp = json.dumps({'id': id, 'language': 'en', 'text':outputString})
+                outputBuffer.append(json.loads(temp))
+                id += 1
+                outputString = ""
+                for word in words:
+                    wordJSON = json.loads((ConvertToJSON(word)))
+                    text = wordJSON.get('text')
+                    outputString += text + " "
+                endPosOfLastLine = json.loads(ConvertToJSON(words[len(words)-1])).get('boundingBox').split(",")
+        temp = json.dumps({'id': id, 'language': 'en', 'text': outputString})
+        outputBuffer.append(json.loads(temp))
+
     return outputBuffer
 
+def callForEachWord(dict, json_text):
+    json_dict = json.loads(json_text)
+    regions = json_dict['regions']
 
+    for region in regions:
+        lines = region['lines']
+        for line in lines:
+            words = line['words']
+            for word in words:
+                increaseCounter(dict, word['text'])
+
+def search_dict(inputdict, key):
+    if key in inputdict:
+        return True
+    return False
+
+def increaseCounter(inputdict, key):
+    if(search_dict(inputdict, key)):
+        inputdict[key] += 1
+    else:
+        inputdict[key] = 0
+
+def getTopValue(dictionary, num_of_items):
+    sorted_dict = {k: v for k, v in sorted(dictionary.items(), key=lambda item: item[1], reverse = True)}
+
+    first_x_pairs = {k: sorted_dict[k] for k in list(sorted_dict)[:num_of_items]}
+
+    return first_x_pairs
+
+def OCR(image_path):
+    # Read the image into a byte array
+    image_data = open(image_path, "rb").read()
+
+    headers = {'Ocp-Apim-Subscription-Key': subscription_key, 'Content-Type': 'application/octet-stream'}
+    params = {'language': 'unk', 'detectOrientation': 'true'}
+    data = image_data
+    response = requests.post(ocr_url, headers=headers, params=params, data=data)
+    response.raise_for_status()
+
+    return response
 
 #global Vars
 limit = 20
@@ -123,21 +154,19 @@ if 'COMPUTER_VISION_ENDPOINT' in os.environ:
 ocr_url = endpoint + "vision/v2.1/ocr"
 
 # Set image_path to the local path of an image that you want to analyze.
-image_path = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/Fin1.jpg"
+image_path = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/text1.PNG"
 
-# Read the image into a byte array
-image_data = open(image_path, "rb").read()
 
-headers = {'Ocp-Apim-Subscription-Key': subscription_key, 'Content-Type': 'application/octet-stream'}
-params = {'language': 'unk', 'detectOrientation': 'true'}
-data = image_data
-response = requests.post(ocr_url, headers=headers, params=params, data=data)
-response.raise_for_status()
 
-analysis = response.json()
+analysis = OCR(image_path).json()
 analysis = ConvertToJSON(analysis)
-print(analysis)
-#analyisReformedForKeyPhases =ConvertToJSON(OCR2KeyPhrasesReFormatter(analysis))
 analyisReformedForKeyPhases =OCR2KeyPhrasesReFormatter(analysis)
-print(analyisReformedForKeyPhases)
-key_phrases(analyisReformedForKeyPhases)
+keywordsList = key_phrases(analyisReformedForKeyPhases)
+
+#building dict
+generalDict = {}
+for keywords in keywordsList:
+    callForEachWord(generalDict, analysis)
+print(generalDict)
+generalDict = getTopValue(generalDict, 200)
+print(ConvertToJSON(generalDict))
