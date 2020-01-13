@@ -1,10 +1,10 @@
 import requests
 from azure.cognitiveservices.language.textanalytics import TextAnalyticsClient
 from msrest.authentication import CognitiveServicesCredentials
-import json;
+import json
 
-import os;
-import sys;
+import os
+import sys
 
 def authenticateClient():
     credentials = CognitiveServicesCredentials(subscription_key)
@@ -138,8 +138,20 @@ def OCR(image_path):
 
     return response
 
+def callForEachWordTwo(inputdict, json_text):
+    json_dict = json.loads(json_text)
+    regions = json_dict['regions']
+
+    for region in regions:
+        lines = region['lines']
+        for line in lines:
+            words = line['words']
+            for word in words:
+                if(search_dict(inputdict, word)):
+                    score += 3
 #global Vars
 limit = 20
+score = 0 
 
 # Add your Computer Vision subscription key and endpoint to your environment variables.
 if 'COMPUTER_VISION_SUBSCRIPTION_KEY' in os.environ:
@@ -154,17 +166,28 @@ if 'COMPUTER_VISION_ENDPOINT' in os.environ:
 ocr_url = endpoint + "vision/v2.1/ocr"
 
 # Set image_path to the local path of an image that you want to analyze.
-image_path = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/text1.PNG"
+trainingPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/text1.PNG"
 
-analysis = OCR(image_path).json()
+realDataPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/Financial.PNG"
+
+analysis = OCR(trainingPath).json()
 analysis = ConvertToJSON(analysis)
 analyisReformedForKeyPhases =OCR2KeyPhrasesReFormatter(analysis)
-keywordsList = key_phrases(analyisReformedForKeyPhases)
+keywordsList = key_phrases(analyisReformedForKeyPhases)   
 
 #building dict
 generalDict = {}
+keywordDict = {}
+
 for keywords in keywordsList:
     callForEachWord(generalDict, analysis)
-print(generalDict)
 generalDict = getTopValue(generalDict, 200)
-print(ConvertToJSON(generalDict))
+
+new_analysis = OCR(realDataPath).json()
+new_analysis = ConvertToJSON(analysis)  
+
+for keywords in keywordsList:
+    callForEachWordTwo(generalDict, new_analysis)
+generalDict = getTopValue(generalDict, 200)
+
+
