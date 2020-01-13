@@ -13,7 +13,7 @@ def authenticateClient():
     return text_analytics_client
 
 def key_phrases(doc):
-    client = authenticateClient();
+    client = authenticateClient()
 
     try:
         response = client.key_phrases(documents=doc)
@@ -34,9 +34,9 @@ def parseStringToInt(array1, array2):
     return array1, array2
 
 def inTheSameParagraph(array1, array2):
-    array1,array2 = parseStringToInt(array1, array2);
+    array1,array2 = parseStringToInt(array1, array2)
 
-    limit = 30;
+    limit = 30
 
     leftBondA1 = array1[0]
     topBondA1 = array1[1]
@@ -65,7 +65,7 @@ def OCR2KeyPhrasesReFormatter(OCRout):
     resp_dict = json.loads(OCRout)
     temp = ConvertToJSON(resp_dict.get('regions'))
     print(temp)
-    id = 0;
+    id = 0
 
     resp_dict = json.loads(temp)
     for JSONObj in resp_dict:
@@ -155,8 +155,6 @@ ocr_url = endpoint + "vision/v2.1/ocr"
 
 # Set image_path to the local path of an image that you want to analyze.
 image_path = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/text1.PNG"
-
-
 
 analysis = OCR(image_path).json()
 analysis = ConvertToJSON(analysis)
