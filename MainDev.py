@@ -23,9 +23,8 @@ def key_phrases(doc):
         print("Encountered exception. {}".format(err))
 
 def ConvertToJSON(OCRout):
-    temp = str(OCRout)
-    temp = temp.replace('\'', '\"')
-    return temp
+    temp = json.dumps(eval(str(OCRout)))
+    return str(temp)
 
 def parseStringToInt(array1, array2):
     for i in range(len(array1)):
