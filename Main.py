@@ -6,6 +6,7 @@ import json
 import os
 import sys
 
+
 def authenticateClient():
     credentials = CognitiveServicesCredentials(subscription_key)
     text_analytics_client = TextAnalyticsClient(
@@ -15,16 +16,16 @@ def authenticateClient():
 def key_phrases(doc):
     client = authenticateClient()
 
+    #print('keyphase', ConvertToJSON(doc))
     try:
-        response = client.key_phrases(documents=doc)
+        response = client.key_phrases(documents=json.loads(ConvertToJSON(doc)))
         return response.documents
     except Exception as err:
         print("Encountered exception. {}".format(err))
 
 def ConvertToJSON(OCRout):
-    temp = str(OCRout)
-    temp = temp.replace('\'', '\"')
-    return temp
+    temp = json.dumps(eval(str(OCRout)))
+    return str(temp)
 
 def parseStringToInt(array1, array2):
     for i in range(len(array1)):
@@ -64,7 +65,6 @@ def OCR2KeyPhrasesReFormatter(OCRout):
     outputString = ""
     resp_dict = json.loads(OCRout)
     temp = ConvertToJSON(resp_dict.get('regions'))
-    print(temp)
     id = 0
 
     resp_dict = json.loads(temp)
@@ -84,8 +84,8 @@ def OCR2KeyPhrasesReFormatter(OCRout):
                 endPosOfLastLine = json.loads(ConvertToJSON(words[len(words)-1])).get('boundingBox').split(",")
             else:
                 temp = json.dumps({'id': id, 'language': 'en', 'text':outputString})
+                id = id + 1
                 outputBuffer.append(json.loads(temp))
-                id += 1
                 outputString = ""
                 for word in words:
                     wordJSON = json.loads((ConvertToJSON(word)))
@@ -93,6 +93,8 @@ def OCR2KeyPhrasesReFormatter(OCRout):
                     outputString += text + " "
                 endPosOfLastLine = json.loads(ConvertToJSON(words[len(words)-1])).get('boundingBox').split(",")
         temp = json.dumps({'id': id, 'language': 'en', 'text': outputString})
+        id = id + 1
+        outputString = ""
         outputBuffer.append(json.loads(temp))
 
     return outputBuffer
@@ -108,6 +110,20 @@ def callForEachWord(dict, json_text):
             for word in words:
                 increaseCounter(dict, word['text'])
 
+def callForEachWordScore(dict, json_text):
+    json_dict = json.loads(json_text)
+    regions = json_dict['regions']
+    scoreDel = 0;
+
+    for region in regions:
+        lines = region['lines']
+        for line in lines:
+            words = line['words']
+            for word in words:
+                if(search_dict(dict, word['text'])):
+                    scoreDel += 5;
+    return scoreDel
+
 def search_dict(inputdict, key):
     if key in inputdict:
         return True
@@ -117,7 +133,7 @@ def increaseCounter(inputdict, key):
     if(search_dict(inputdict, key)):
         inputdict[key] += 1
     else:
-        inputdict[key] = 0
+        inputdict[key] = 1
 
 def getTopValue(dictionary, num_of_items):
     sorted_dict = {k: v for k, v in sorted(dictionary.items(), key=lambda item: item[1], reverse = True)}
@@ -138,37 +154,53 @@ def OCR(image_path):
 
     return response
 
-def callForEachWordTwo(inputdict, json_text):
+def callForEachWordKey(dict, json_text):
+    json_text = ConvertToJSON(json_text.replace("None", "\"None\""))
+    json_dict = json.loads(ConvertToJSON(json_text))
+    key_phrases = json_dict['key_phrases']
+    for phrase in key_phrases:
+        for word in phrase.split():
+            increaseCounter(dict, word)
+
+def callForEachWordKeyReal(dict, json_text):
+    json_text = ConvertToJSON(json_text.replace("None", "\"None\""))
+    json_dict = json.loads(ConvertToJSON(json_text))
+    key_phrases = json_dict['key_phrases']
+    scoreDel = 0;
+    for phrase in key_phrases:
+        if search_dict(dict, phrase):
+            scoreDel += 10;
+    return  scoreDel
+
+def callForEachWordRealOriginal(inputdict, json_text):
     json_dict = json.loads(json_text)
     regions = json_dict['regions']
+    scoreDel = 0
 
     for region in regions:
         lines = region['lines']
         for line in lines:
             words = line['words']
             for word in words:
-                if(search_dict(inputdict, word)):
-                    score += 3
+                if(search_dict(inputdict, word['text'])):
+                    scoreDel += 3
+    return scoreDel
+
 #global Vars
 limit = 20
-score = 0 
+score = 0
 
-# Add your Computer Vision subscription key and endpoint to your environment variables.
-if 'COMPUTER_VISION_SUBSCRIPTION_KEY' in os.environ:
-    subscription_key = os.environ['COMPUTER_VISION_SUBSCRIPTION_KEY']
-else:
-    print("\nSet the COMPUTER_VISION_SUBSCRIPTION_KEY environment variable.\n**Restart your shell or IDE for changes to take effect.**")
-    sys.exit()
 
-if 'COMPUTER_VISION_ENDPOINT' in os.environ:
-    endpoint = os.environ['COMPUTER_VISION_ENDPOINT']
+subscription_key = "ffcc4bbd174c4b6e97d0a945aebf8b98"
+endpoint = "https://uksouth.api.cognitive.microsoft.com/"
 
 ocr_url = endpoint + "vision/v2.1/ocr"
 
 # Set image_path to the local path of an image that you want to analyze.
-trainingPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/text1.PNG"
+trainingPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/Financial.PNG"
 
-realDataPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/Financial.PNG"
+#realDataPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/NoFin.jpg"
+realDataPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/bug.png"
 
 analysis = OCR(trainingPath).json()
 analysis = ConvertToJSON(analysis)
@@ -178,16 +210,26 @@ keywordsList = key_phrases(analyisReformedForKeyPhases)
 #building dict
 generalDict = {}
 keywordDict = {}
-
-for keywords in keywordsList:
-    callForEachWord(generalDict, analysis)
+#General
+callForEachWord(generalDict, analysis)
 generalDict = getTopValue(generalDict, 200)
+#Key
+for keywords in keywordsList:
+    callForEachWordKey(keywordDict, str(keywords))
+keywordDict = getTopValue(keywordDict, 200)
+print('keyword dictionary',keywordDict)
+print('general dictionary',generalDict)
 
 new_analysis = OCR(realDataPath).json()
-new_analysis = ConvertToJSON(analysis)  
+new_analysis = ConvertToJSON(new_analysis)
+analyisReformedForKeyPhasesReal =OCR2KeyPhrasesReFormatter(new_analysis)
+keywordsListReal = key_phrases(analyisReformedForKeyPhasesReal)
 
-for keywords in keywordsList:
-    callForEachWordTwo(generalDict, new_analysis)
-generalDict = getTopValue(generalDict, 200)
-
-
+for keywordsReal in keywordsListReal:
+    score += callForEachWordKeyReal(keywordDict, str(keywordsReal))
+print ('key word matching score:', score)
+generalScore = 0
+generalScore += callForEachWordRealOriginal(generalDict, new_analysis)
+print ('general matching score:', generalScore)
+score += generalScore
+print ('final score:', score)

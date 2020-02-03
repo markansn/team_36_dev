@@ -1,30 +1,54 @@
-import requests
+import io
+import pickle
+
+import requests, json, os, pdf2image, sys
+from PIL import Image
 from azure.cognitiveservices.language.textanalytics import TextAnalyticsClient
 from msrest.authentication import CognitiveServicesCredentials
-import json
 
-import os
-import sys
+# global Vars
+
+# Add your Computer Vision subscription key and endpoint to your environment variables.
+authsubscription_key = ""
+authendpoint = ""
+authocr_url = ""
+
+# dicts
+generalDict = {}
+keywordDict = {}
+
+
+def assaginaAuthenticationCredentials(subsKey, endPoint, ocr_url):
+    global authsubscription_key
+    global authendpoint
+    global authocr_url
+    authsubscription_key = subsKey
+    authendpoint = endPoint
+    authocr_url = ocr_url
+
 
 def authenticateClient():
-    credentials = CognitiveServicesCredentials(subscription_key)
+    credentials = CognitiveServicesCredentials(authsubscription_key)
     text_analytics_client = TextAnalyticsClient(
-        endpoint=endpoint, credentials=credentials)
+        endpoint=authendpoint, credentials=credentials)
     return text_analytics_client
+
 
 def key_phrases(doc):
     client = authenticateClient()
 
-    #print('keyphase', ConvertToJSON(doc))
+    # print('keyphase', ConvertToJSON(doc))
     try:
         response = client.key_phrases(documents=json.loads(ConvertToJSON(doc)))
         return response.documents
     except Exception as err:
         print("Encountered exception. {}".format(err))
 
+
 def ConvertToJSON(OCRout):
     temp = json.dumps(eval(str(OCRout)))
     return str(temp)
+
 
 def parseStringToInt(array1, array2):
     for i in range(len(array1)):
@@ -33,8 +57,9 @@ def parseStringToInt(array1, array2):
         array2[i] = int(array2[i])
     return array1, array2
 
+
 def inTheSameParagraph(array1, array2):
-    array1,array2 = parseStringToInt(array1, array2)
+    array1, array2 = parseStringToInt(array1, array2)
 
     limit = 30
 
@@ -48,16 +73,17 @@ def inTheSameParagraph(array1, array2):
     widthA2 = array2[2]
     heightA2 = array2[3]
 
-    if abs((leftBondA1+widthA1)-leftBondA2)<limit:
+    if abs((leftBondA1 + widthA1) - leftBondA2) < limit:
         return True
-    elif abs((leftBondA2+widthA2)-leftBondA1)<limit:
-        return  True
-    elif abs((topBondA1+heightA1)-topBondA2)<limit:
+    elif abs((leftBondA2 + widthA2) - leftBondA1) < limit:
         return True
-    elif abs((topBondA2+heightA2)-topBondA1)<limit:
+    elif abs((topBondA1 + heightA1) - topBondA2) < limit:
+        return True
+    elif abs((topBondA2 + heightA2) - topBondA1) < limit:
         return True
     else:
         return False
+
 
 def OCR2KeyPhrasesReFormatter(OCRout):
     outputString = ""
@@ -78,6 +104,7 @@ def OCR2KeyPhrasesReFormatter(OCRout):
         outputBuffer.append(json.loads(temp))
     return outputBuffer
 
+
 def callForEachWord(dict, json_text):
     json_dict = json.loads(json_text)
     regions = json_dict['regions']
@@ -89,6 +116,7 @@ def callForEachWord(dict, json_text):
             for word in words:
                 increaseCounter(dict, word['text'])
 
+
 def callForEachWordScore(dict, json_text):
     json_dict = json.loads(json_text)
     regions = json_dict['regions']
@@ -99,39 +127,44 @@ def callForEachWordScore(dict, json_text):
         for line in lines:
             words = line['words']
             for word in words:
-                if(search_dict(dict, word['text'])):
+                if (search_dict(dict, word['text'])):
                     scoreDel += 5;
     return scoreDel
+
 
 def search_dict(inputdict, key):
     if key in inputdict:
         return True
     return False
 
+
 def increaseCounter(inputdict, key):
-    if(search_dict(inputdict, key)):
+    if (search_dict(inputdict, key)):
         inputdict[key] += 1
     else:
         inputdict[key] = 1
 
+
 def getTopValue(dictionary, num_of_items):
-    sorted_dict = {k: v for k, v in sorted(dictionary.items(), key=lambda item: item[1], reverse = True)}
+    sorted_dict = {k: v for k, v in sorted(dictionary.items(), key=lambda item: item[1], reverse=True)}
 
     first_x_pairs = {k: sorted_dict[k] for k in list(sorted_dict)[:num_of_items]}
 
     return first_x_pairs
 
-def OCR(image_path):
-    # Read the image into a byte array
-    image_data = open(image_path, "rb").read()
 
-    headers = {'Ocp-Apim-Subscription-Key': subscription_key, 'Content-Type': 'application/octet-stream'}
+def OCR(image):
+    # Read the image into a byte array
+    image_data = image_to_byte_array(image)
+
+    headers = {'Ocp-Apim-Subscription-Key': authsubscription_key, 'Content-Type': 'application/octet-stream'}
     params = {'language': 'unk', 'detectOrientation': 'true'}
     data = image_data
-    response = requests.post(ocr_url, headers=headers, params=params, data=data)
+    response = requests.post(authocr_url, headers=headers, params=params, data=data)
     response.raise_for_status()
 
     return response
+
 
 def callForEachWordKey(dict, json_text):
     json_text = ConvertToJSON(json_text.replace("None", "\"None\""))
@@ -141,15 +174,17 @@ def callForEachWordKey(dict, json_text):
         for word in phrase.split():
             increaseCounter(dict, word)
 
+
 def callForEachWordKeyReal(dict, json_text):
     json_text = ConvertToJSON(json_text.replace("None", "\"None\""))
     json_dict = json.loads(ConvertToJSON(json_text))
     key_phrases = json_dict['key_phrases']
-    scoreDel = 0;
+    scoreDel = 0
     for phrase in key_phrases:
         if search_dict(dict, phrase):
-            scoreDel += 10;
-    return  scoreDel
+            scoreDel += 1
+    return scoreDel
+
 
 def callForEachWordRealOriginal(inputdict, json_text):
     json_dict = json.loads(json_text)
@@ -161,62 +196,156 @@ def callForEachWordRealOriginal(inputdict, json_text):
         for line in lines:
             words = line['words']
             for word in words:
-                if(search_dict(inputdict, word['text'])):
-                    scoreDel += 3
+                if (search_dict(inputdict, word['text'])):
+                    scoreDel += 0.5
     return scoreDel
 
-#global Vars
-limit = 20
-score = 0
 
-# Add your Computer Vision subscription key and endpoint to your environment variables.
-if 'COMPUTER_VISION_SUBSCRIPTION_KEY' in os.environ:
-    subscription_key = os.environ['COMPUTER_VISION_SUBSCRIPTION_KEY']
-else:
-    print("\nSet the COMPUTER_VISION_SUBSCRIPTION_KEY environment variable.\n**Restart your shell or IDE for changes to take effect.**")
-    sys.exit()
+def getLength(OCRout):
+    length = 0
+    outputString = ""
+    outputBuffer = []
+    id = 0
 
-if 'COMPUTER_VISION_ENDPOINT' in os.environ:
-    endpoint = os.environ['COMPUTER_VISION_ENDPOINT']
+    plainText = json.loads(OCRout)
+    regions = plainText['regions']
+    for region in regions:
+        id += 1
+        lines = region['lines']
+        for line in lines:
+            words = line['words']
+            for word in words:
+                length += 1
+        temp = json.dumps({'id': id, 'language': 'en', 'text': outputString})
+        outputBuffer.append(json.loads(temp))
+    return length
 
-ocr_url = endpoint + "vision/v2.1/ocr"
 
-# Set image_path to the local path of an image that you want to analyze.
-trainingPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/Financial.PNG"
+def trainAlgo(filepath):
+    global generalDict
+    global keywordDict
+    trainingPath = filepath
+    analysis = OCR(trainingPath).json()
+    analysis = ConvertToJSON(analysis)
+    analyisReformedForKeyPhases = OCR2KeyPhrasesReFormatter(analysis)
+    keywordsList = key_phrases(analyisReformedForKeyPhases)
 
-#realDataPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/NoFin.jpg"
-realDataPath = "C:/Users/liu87/Desktop/UN project/Python 3.7 code src/image/FinFinal.jpg"
+    # General
+    callForEachWord(generalDict, analysis)
+    generalDict = getTopValue(generalDict, 200)
+    # Key
+    for keywords in keywordsList:
+        callForEachWordKey(keywordDict, str(keywords))
+    # if keywordsList != None:
+    #     for keywords in keywordsList:
+    #         callForEachWordKey(keywordDict, str(keywords))
+    # else:
+    #     filepath.show()
+    #     print("stop")
 
-analysis = OCR(trainingPath).json()
-analysis = ConvertToJSON(analysis)
-analyisReformedForKeyPhases =OCR2KeyPhrasesReFormatter(analysis)
-keywordsList = key_phrases(analyisReformedForKeyPhases)   
+    keywordDict = getTopValue(keywordDict, 200)
 
-#building dict
-generalDict = {}
-keywordDict = {}
-#General
-callForEachWord(generalDict, analysis)
-generalDict = getTopValue(generalDict, 200)
-#Key
-for keywords in keywordsList:
-    callForEachWordKey(keywordDict, str(keywords))
-keywordDict = getTopValue(keywordDict, 200)
-print('keyword dictionary',keywordDict)
-print('general dictionary',generalDict)
 
-new_analysis = OCR(realDataPath).json()
-new_analysis = ConvertToJSON(new_analysis)
-print("analysis:", ConvertToJSON(OCR2KeyPhrasesReFormatter(new_analysis)))
-analyisReformedForKeyPhasesReal = OCR2KeyPhrasesReFormatter(new_analysis)
-keywordsListReal = key_phrases(analyisReformedForKeyPhasesReal)
+def extractAlgo(filepath):
+    score = 0
+    percentage = 0
+    realDataPath = filepath
+    new_analysis = OCR(realDataPath).json()
+    new_analysis = ConvertToJSON(new_analysis)
+    analyisReformedForKeyPhasesReal = OCR2KeyPhrasesReFormatter(new_analysis)
+    keywordsListReal = key_phrases(analyisReformedForKeyPhasesReal)
 
-for keywordsReal in keywordsListReal:
-    score += callForEachWordKeyReal(keywordDict, str(keywordsReal))
-print ('key word matching score:', score)
-generalScore = 0
-generalScore += callForEachWordRealOriginal(generalDict, new_analysis)
-print ('general matching score:', generalScore)
-score += generalScore
-print ('final score:', score)
+    for keywordsReal in keywordsListReal:
+        score += callForEachWordKeyReal(keywordDict, str(keywordsReal))
+    generalScore = 0
+    generalScore += callForEachWordRealOriginal(generalDict, new_analysis)
 
+    score += generalScore
+    length = getLength(new_analysis)
+    percentage += (score / length) * 100
+    if score>130:
+        filepath.show()
+    return score
+
+
+def listPdfs(filepath):
+    directory = filepath
+    pdfs = []
+    for filename in os.listdir(directory):
+        if filename.endswith(".pdf"):
+            pdfs.append(os.path.join(directory, filename))
+        else:
+            continue
+    return pdfs
+
+
+def image_to_byte_array(image: Image):
+    imgByteArr = io.BytesIO()
+    image.save(imgByteArr, format=image.format)
+    imgByteArr = imgByteArr.getvalue()
+    return imgByteArr
+
+
+def pdfsIterator(pdfs):
+    pdfStream = []
+    pathname = os.path.dirname(sys.argv[0])
+    pathname = os.path.abspath(pathname) + "\\poppler-0.68.0\\bin"
+    for pdf in pdfs:
+        pages = pdf2image.convert_from_path(pdf, 200, poppler_path=pathname, fmt="jpeg")
+        pdfStream.append(pages)
+    return pdfStream
+
+
+def trainningWithPath(inputFolder):
+    pdfs = listPdfs(inputFolder)
+    pdfStream = pdfsIterator(pdfs)
+    for pdf in pdfStream:
+        for page in pdf:
+            trainAlgo(page)
+
+
+def extractWithPath(inputFolder):
+    result = []
+    pdfs = listPdfs(inputFolder)
+    pdfStream = pdfsIterator(pdfs)
+    for pdf in pdfStream:
+        score = []
+        pageNum = 1
+        for page in pdf:
+            score.append(str(pageNum)+':'+str(extractAlgo(page)))
+            pageNum += 1
+    result.append(score)
+    return result
+
+
+# def createPickle(keyDictionary, generalDictionary, directory, filename):
+#     MAX_DICT_NUMBER = 5
+#     path = os.path.join(directory, filename + "." + "pickle")
+#     print(path)
+#     dict_list = []
+#     key_dict_list = []
+#     general_dict_list = []
+#     dict
+#     if os.path.exists(path):
+#         currentList = getPickle(directory, filename)
+#
+#         if len(currentList) == MAX_DICT_NUMBER:
+#             currentList.pop(0)
+#
+#         currentList.append(dictionary)
+#         dict_list = currentList
+#
+#     else:
+#         dict_list = [dictionary]
+#
+#     with open(path, 'wb') as handle:
+#         pickle.dump(dict_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
+#
+#
+# def getPickle(directory, filename):
+#     path = os.path.join(directory, filename + "." + "pickle")
+#     with open(path, 'rb') as handle:
+#         p = pickle.load(handle)
+#
+#
+#     return p
