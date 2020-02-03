@@ -19,13 +19,13 @@ while loop:
         input("please press enter after you done that")
 
         pathname = os.path.dirname(sys.argv[0])
-        pathname = os.path.abspath(pathname) + "\\TrainingInputFolder"
+        pathname = os.path.abspath(pathname) + os.path.sep + "TrainingInputFolder"
 
         MainDev.trainningWithPath(pathname)
 
     elif mainOption == "2":
         pathname = os.path.dirname(sys.argv[0])
-        pathname = os.path.abspath(pathname) + "\\ExtractionInputFolder"
+        pathname = os.path.abspath(pathname) + os.path.sep + "ExtractionInputFolder"
 
         print(MainDev.extractWithPath(pathname))
 

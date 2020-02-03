@@ -289,7 +289,7 @@ def image_to_byte_array(image: Image):
 def pdfsIterator(pdfs):
     pdfStream = []
     pathname = os.path.dirname(sys.argv[0])
-    pathname = os.path.abspath(pathname) + "\\poppler-0.68.0\\bin"
+    pathname = os.path.abspath(pathname) + os.path.sep + "poppler-0.68.0" + os.path.sep + "bin"
     for pdf in pdfs:
         pages = pdf2image.convert_from_path(pdf, 200, poppler_path=pathname, fmt="jpeg")
         pdfStream.append(pages)
