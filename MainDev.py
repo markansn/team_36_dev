@@ -5,7 +5,8 @@ import requests, json, os, pdf2image, sys
 from PIL import Image
 from azure.cognitiveservices.language.textanalytics import TextAnalyticsClient
 from msrest.authentication import CognitiveServicesCredentials
-
+import platform
+#todo use brew to install popper on mac
 # global Vars
 
 # Add your Computer Vision subscription key and endpoint to your environment variables.
@@ -289,10 +290,18 @@ def image_to_byte_array(image: Image):
 def pdfsIterator(pdfs):
     pdfStream = []
     pathname = os.path.dirname(sys.argv[0])
-    pathname = os.path.abspath(pathname) + os.path.sep + "poppler-0.68.0" + os.path.sep + "bin"
+    if platform.system() == 'Windows':
+        pathname = os.path.abspath(pathname) + os.path.sep + "poppler-0.68.0" + os.path.sep + "bin"
+
     for pdf in pdfs:
-        pages = pdf2image.convert_from_path(pdf, 200, poppler_path=pathname, fmt="jpeg")
+
+        if platform.system() == 'Windows':
+            pages = pdf2image.convert_from_path(pdf, 200, poppler_path=pathname, fmt="jpeg")
+        else:
+            pages = pdf2image.convert_from_path(pdf, 200, fmt="jpeg")
+
         pdfStream.append(pages)
+
     return pdfStream
 
 
