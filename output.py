@@ -2,7 +2,7 @@ import os
 import sys
 
 import MainDev
-
+import PickleDict
 configurationFile = open("configuration.txt", "r")
 subscription_key = configurationFile.readline().rstrip("\n\r")
 endpoint = configurationFile.readline().rstrip("\n\r")
@@ -33,9 +33,12 @@ while loop:
         dirPath = input("Path: ")
         FileName = input("Name: ")
         #MainDev.
+        PickleDict.storeTrainingData(MainDev.keywordDict, MainDev.generalDict, dirPath, FileName)
 
-    # elif mainOption == "4":
-    #     #read local
+    elif mainOption == "4":
+        # dirPath = input("Path: ")
+        # FileName = input("Name: ")
+        # MainDev.keywordDict, MainDev.generalDict = PickleDict.getTrainingData(dirPath, FileName)
 
     # elif mainOption == "5":
     #     #undo last train
