@@ -19,7 +19,7 @@ def storeTrainingData(keywordDict, generalDict, directory, filename):
 
 def fetchTrainingData(directory, filename):
     data = getPickle(directory, filename)
-    return data[0], data[1]
+    return data[0][0], data[0][1]
 
 
 
@@ -53,11 +53,6 @@ def revert(directory, filename):
         pickle.dump(p, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-
-
-
-
-
 def createPickle(dictionary, directory, filename):
     MAX_DICT_NUMBER = 5
     path = os.path.join(directory, filename + "." + "pickle")
@@ -86,24 +81,3 @@ def getPickle(directory, filename):
 
 
     return p
-
-
-
-
-
-# def main():
-#     trainingData = {
-#         1: "train",
-#         2: "data"
-#     }
-#
-#     generalData = {
-#         1: "car",
-#         2: "information"
-#     }
-#
-#     createPickle([trainingData, generalData], "/Users/markanson/dev/team_36_dev/pickles/", "example")
-#     print(getPickle("/Users/markanson/dev/team_36_dev/pickles/", "example"))
-#
-#
-# main()

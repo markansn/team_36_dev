@@ -1,5 +1,4 @@
 import io
-import pickle
 
 import requests, json, os, pdf2image, sys
 from PIL import Image
@@ -325,36 +324,3 @@ def extractWithPath(inputFolder):
             pageNum += 1
     result.append(score)
     return result
-
-
-# def createPickle(keyDictionary, generalDictionary, directory, filename):
-#     MAX_DICT_NUMBER = 5
-#     path = os.path.join(directory, filename + "." + "pickle")
-#     print(path)
-#     dict_list = []
-#     key_dict_list = []
-#     general_dict_list = []
-#     dict
-#     if os.path.exists(path):
-#         currentList = getPickle(directory, filename)
-#
-#         if len(currentList) == MAX_DICT_NUMBER:
-#             currentList.pop(0)
-#
-#         currentList.append(dictionary)
-#         dict_list = currentList
-#
-#     else:
-#         dict_list = [dictionary]
-#
-#     with open(path, 'wb') as handle:
-#         pickle.dump(dict_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
-#
-#
-# def getPickle(directory, filename):
-#     path = os.path.join(directory, filename + "." + "pickle")
-#     with open(path, 'rb') as handle:
-#         p = pickle.load(handle)
-#
-#
-#     return p
