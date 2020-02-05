@@ -2,7 +2,7 @@ import os
 import sys
 
 import Model
-import PickleDict
+import HandleDictionary
 
 configurationFile = open("configuration.txt", "r")
 subscription_key = configurationFile.readline().rstrip("\n\r")
@@ -33,17 +33,17 @@ while loop:
     elif mainOption == "3":
         dirPath = input("Path: ")
         fileName = input("Name: ")
-        PickleDict.storeTrainingData(Model.keywordDict, Model.generalDict, dirPath, fileName)
+        HandleDictionary.storeTrainingData(Model.keywordDict, Model.generalDict, dirPath, fileName)
 
     elif mainOption == "4":
         dirPath = input("Path: ")
         fileName = input("Name: ")
-        Model.keywordDict, Model.generalDict = PickleDict.fetchTrainingData(dirPath, fileName)
+        Model.keywordDict, Model.generalDict = HandleDictionary.fetchTrainingData(dirPath, fileName)
 
     elif mainOption == "5":
         dirPath = input("Path: ")
         fileName = input("Name: ")
-        PickleDict.revert(dirPath, fileName)
+        HandleDictionary.revert(dirPath, fileName)
 
     elif mainOption == "6":
         loop = False
