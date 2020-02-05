@@ -1,11 +1,11 @@
 import io
-import pickle
 
 import requests, json, os, pdf2image, sys
 from PIL import Image
 from azure.cognitiveservices.language.textanalytics import TextAnalyticsClient
 from msrest.authentication import CognitiveServicesCredentials
-
+import platform
+#todo use brew to install popper on mac
 # global Vars
 
 # Add your Computer Vision subscription key and endpoint to your environment variables.
@@ -289,10 +289,18 @@ def image_to_byte_array(image: Image):
 def pdfsIterator(pdfs):
     pdfStream = []
     pathname = os.path.dirname(sys.argv[0])
-    pathname = os.path.abspath(pathname) + "\\poppler-0.68.0\\bin"
+    if platform.system() == 'Windows':
+        pathname = os.path.abspath(pathname) + os.path.sep + "poppler-0.68.0" + os.path.sep + "bin"
+
     for pdf in pdfs:
-        pages = pdf2image.convert_from_path(pdf, 200, poppler_path=pathname, fmt="jpeg")
+
+        if platform.system() == 'Windows':
+            pages = pdf2image.convert_from_path(pdf, 200, poppler_path=pathname, fmt="jpeg")
+        else:
+            pages = pdf2image.convert_from_path(pdf, 200, fmt="jpeg")
+
         pdfStream.append(pages)
+
     return pdfStream
 
 
@@ -316,36 +324,3 @@ def extractWithPath(inputFolder):
             pageNum += 1
     result.append(score)
     return result
-
-
-# def createPickle(keyDictionary, generalDictionary, directory, filename):
-#     MAX_DICT_NUMBER = 5
-#     path = os.path.join(directory, filename + "." + "pickle")
-#     print(path)
-#     dict_list = []
-#     key_dict_list = []
-#     general_dict_list = []
-#     dict
-#     if os.path.exists(path):
-#         currentList = getPickle(directory, filename)
-#
-#         if len(currentList) == MAX_DICT_NUMBER:
-#             currentList.pop(0)
-#
-#         currentList.append(dictionary)
-#         dict_list = currentList
-#
-#     else:
-#         dict_list = [dictionary]
-#
-#     with open(path, 'wb') as handle:
-#         pickle.dump(dict_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
-#
-#
-# def getPickle(directory, filename):
-#     path = os.path.join(directory, filename + "." + "pickle")
-#     with open(path, 'rb') as handle:
-#         p = pickle.load(handle)
-#
-#
-#     return p

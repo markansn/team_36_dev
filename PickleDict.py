@@ -1,45 +1,28 @@
 import pickle
 import os
 import datetime
-def createPickle(dictionary, directory, filename):
-    MAX_DICT_NUMBER = 5
-    path = os.path.join(directory, filename + "." + "pickle")
-    print(path)
-    dict_list = []
-    if os.path.exists(path):
-        currentList = getPickle(directory, filename)
-
-        if len(currentList) == MAX_DICT_NUMBER:
-            currentList.pop(0)
-
-        currentList.append(dictionary)
-        dict_list = currentList
-
-    else:
-        dict_list = [dictionary]
-
-    with open(path, 'wb') as handle:
-        pickle.dump(dict_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-def getPickle(directory, filename):
-    path = os.path.join(directory, filename + "." + "pickle")
-    with open(path, 'rb') as handle:
-        p = pickle.load(handle)
-
-
-    return p
-
-
-
-
 
 
 """
 
-USE THESE THREE FUNCTIONS 
+USE THESE FUNCTIONS 
 
 """
+
+
+
+
+
+def storeTrainingData(keywordDict, generalDict, directory, filename):
+
+    createPickle([keywordDict, generalDict], directory, filename)
+
+def fetchTrainingData(directory, filename):
+    data = getPickle(directory, filename)
+    return data[0][0], data[0][1]
+
+
+
 # Fetch pickle
 
 
@@ -70,4 +53,31 @@ def revert(directory, filename):
         pickle.dump(p, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
+def createPickle(dictionary, directory, filename):
+    MAX_DICT_NUMBER = 5
+    path = os.path.join(directory, filename + "." + "pickle")
+    print(path)
+    dict_list = []
+    if os.path.exists(path):
+        currentList = getPickle(directory, filename)
 
+        if len(currentList) == MAX_DICT_NUMBER:
+            currentList.pop(0)
+
+        currentList.append(dictionary)
+        dict_list = currentList
+
+    else:
+        dict_list = [dictionary]
+
+    with open(path, 'wb') as handle:
+        pickle.dump(dict_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+def getPickle(directory, filename):
+    path = os.path.join(directory, filename + "." + "pickle")
+    with open(path, 'rb') as handle:
+        p = pickle.load(handle)
+
+
+    return p
