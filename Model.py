@@ -304,7 +304,7 @@ def pdfsIterator(pdfs):
     return pdfStream
 
 
-def trainningWithPath(inputFolder):
+def trainingWithPath(inputFolder):
     pdfs = listPdfs(inputFolder)
     pdfStream = pdfsIterator(pdfs)
     for pdf in pdfStream:

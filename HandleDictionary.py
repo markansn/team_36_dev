@@ -56,7 +56,6 @@ def revert(directory, filename):
 def createPickle(dictionary, directory, filename):
     MAX_DICT_NUMBER = 5
     path = os.path.join(directory, filename + "." + "pickle")
-    print(path)
     dict_list = []
     if os.path.exists(path):
         currentList = getPickle(directory, filename)

@@ -7,35 +7,28 @@ def getPathAndFile():
     return input("Path: "), input("Name: ")
 
 
-def train():
-    print("please copy the file to the folder named \"TrainingInputFolder\"")
-    input("please press enter after you done that")
-
+def train(file):
     pathname = os.path.dirname(sys.argv[0])
-    pathname = os.path.abspath(pathname) + os.path.sep + "TrainingInputFolder"
+    pathname = os.path.abspath(pathname) + os.path.sep + file
 
-    Model.trainningWithPath(pathname)
+    Model.trainingWithPath(pathname)
 
 
-def extract():
+def extract(file):
     pathname = os.path.dirname(sys.argv[0])
-    pathname = os.path.abspath(pathname) + os.path.sep + "ExtractionInputFolder"
+    pathname = os.path.abspath(pathname) + os.path.sep + file
 
-    print(Model.extractWithPath(pathname))
+    return(Model.extractWithPath(pathname))
 
 
 
-def storeTrainingData():
-    dirPath, fileName = getPathAndFile()
+def storeTrainingData(dirPath, fileName):
     HandleDictionary.storeTrainingData(Model.keywordDict, Model.generalDict, dirPath, fileName)
 
-def fetchTrainingData():
-    dirPath, fileName = getPathAndFile()
-    Model.keywordDict, Model.generalDict = HandleDictionary.fetchTrainingData(dirPath, fileName)
-    print(Model.keywordDict)
+def fetchTrainingData(dirPath, fileName):
 
-def revert():
-    dirPath, fileName = getPathAndFile()
+    Model.keywordDict, Model.generalDict = HandleDictionary.fetchTrainingData(dirPath, fileName)
+def revert(dirPath, fileName):
     HandleDictionary.revert(dirPath, fileName)
 
 
@@ -56,21 +49,25 @@ def main():
             "Please enter a number to select an option: \n 1:Use a group of data to train the algorithm \n 2:Extract information out of a document \n\n 3:save current dictionary to local disk \n 4:Load dictionary from local disk \n 5:undo last training \n 6:Exit\n")
         mainOption = input("Your choice: ")
         if mainOption == "1":
-            train()
+            print("please copy the file to the folder named \"TrainingInputFolder\"")
+            input("please press enter after you done that")
+            train("TrainingInputFolder")
 
         elif mainOption == "2":
-            extract()
+            print(extract("ExtractionInputFolder"))
 
         elif mainOption == "3":
-            storeTrainingData()
+            dirPath, fileName  = getPathAndFile()
+            storeTrainingData(dirPath, fileName)
 
         elif mainOption == "4":
-            fetchTrainingData()
-            print("---")
-            print(Model.keywordDict)
+            dirPath, fileName = getPathAndFile()
+            fetchTrainingData(dirPath, fileName)
+
 
         elif mainOption == "5":
-            revert()
+            dirPath, fileName = getPathAndFile()
+            revert(dirPath, fileName)
 
         elif mainOption == "6":
             loop = False
