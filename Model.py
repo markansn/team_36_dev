@@ -153,7 +153,7 @@ def getTopValue(dictionary, num_of_items):
     return first_x_pairs
 
 
-def OCR(image):
+def OCR(image): #!!!
     # Read the image into a byte array
     image_data = image_to_byte_array(image)
 
@@ -225,7 +225,8 @@ def trainAlgo(filepath):
     global generalDict
     global keywordDict
     trainingPath = filepath
-    analysis = OCR(trainingPath).json()
+    print(trainingPath)
+    analysis = OCR(trainingPath).json() #!!!
     analysis = ConvertToJSON(analysis)
     analyisReformedForKeyPhases = OCR2KeyPhrasesReFormatter(analysis)
     keywordsList = key_phrases(analyisReformedForKeyPhases)
@@ -286,7 +287,7 @@ def image_to_byte_array(image: Image):
     return imgByteArr
 
 
-def pdfsIterator(pdfs):
+def pdfsIterator(pdfs): #returns list of list of images from pdf !!
     pdfStream = []
     pathname = os.path.dirname(sys.argv[0])
     if platform.system() == 'Windows':
