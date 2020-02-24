@@ -77,49 +77,46 @@ def getTextFromImage(img):
 
 
 
-def getWordsOnFirstPage(images, word_exists):
+def getWordsOnPage(page, images, word_exists):
     text = []
-
-    first_page = getTextFromImage(images[0][0])
+    first_page = None
+    try:
+        first_page = getTextFromImage(images[0][page])
+    except:
+        return []
 
     # for img in images[0]:
     #
     #     text = getTextFromImage(img)
 
-    possible_names = []
+    words_on_first_page = []
+    banned_words = ["annual", "report", "", " ", "results", "reports"]
     for word in first_page:
-        print(word)
+        # print(word)
+        #print(word)
         # if '@' in word.lower() or "www." in word.lower() or ".org" in word.lower():
         #     print(word)
 
 
         word = word.lower().translate(punctuation)
 
-        if word not in setofwords and not word.isdigit() and not word_exists:
-            possible_names.append(word)
-        elif not word.isdigit:
-            possible_names.append(word)
+        # if not word_exists:
+        #
+        #     if word not in setofwords and not word.isdigit():
+        #         words_on_first_page.append(word)
+        # else:
+        #     if not word.isdigit:
+        #         words_on_first_page.append(word)
+        if word not in banned_words:
+            words_on_first_page.append(word)
+    return words_on_first_page
 
-    return possible_names
 
+def possible_name_in_file_name(word, reportName):
+    return word.lower() in reportName.lower()
 
-def possible_name_in_file_name(possible_names, reportName):
-    for item in possible_names:
-        if item in reportName.lower():
-            return item
-    return []
-
-def readReport(reportName):
-    images = Model.pdfsIterator([reportName])
-
-    possible_names = getWordsOnFirstPage(images, False)
-    if len(possible_names) == 0:
-        return "no names found on first page"
-
-    in_file_name = possible_name_in_file_name(possible_names, reportName)
-    if not in_file_name == []:
-        return in_file_name
-
+def get_matching_words_from_urls(images, words_on_first_page):
+    words_matching_urls = []
 
     images[0].reverse()
     for img in images[0]:
@@ -127,19 +124,77 @@ def readReport(reportName):
 
         urls = []
         for word in text:
-            if '@' in word.lower() or "www." in word.lower() or ".org" in word.lower():
-                urls.append(word)
+            if '@' in word.lower():
+                split_word = word.split("@")
+                # if word.lower() in split_word[1]:
+                #     urls.append(word)
+                urls.append(split_word[1])
+            elif "www." in word.lower() or ".org" in word.lower():
+                split_word = word.split(".")
+                if split_word[0] == "www" or "http" in split_word[0]:
+                    urls.append(split_word[1])
+                else:
+                    urls.append(word)
 
         for url in urls:
-            for possible_name in possible_names:
-                if possible_name in url:
-                    return possible_name
+            print(url)
+            for possible_name in words_on_first_page:
+                if possible_name in url and len(possible_name) > 3:
+                    words_matching_urls.append(possible_name)
+
+            if words_matching_urls != []:
+                return words_matching_urls
+
+    return []
+
+def get_matching_words_from_file_name(words_on_first_page, reportName):
+    words_in_file_name = []
+    for word in words_on_first_page:
+        if possible_name_in_file_name(word, reportName) and not word.isdigit():
+            words_in_file_name.append(word)
+
+
+
+def concat_words(i):
+
+    string = ""
+    for item in i:
+        string = string + item + " "
+    return string
+
+def readReport(reportName):
+    images = Model.pdfsIterator([reportName])
+
+    words_on_first_page = getWordsOnPage(0, images, True) + getWordsOnPage(1, images, True) + getWordsOnPage(2, images, True)
+
+    words_on_first_page = list(dict.fromkeys(words_on_first_page))
+
+    if len(words_on_first_page) == 0:
+        return "no names found on first page"
+
+
+
+    print(words_on_first_page)
+
+    matching_words_from_urls = get_matching_words_from_urls(images, words_on_first_page)
+
+    if matching_words_from_urls == []:
+        matching_words_from_file_name = get_matching_words_from_file_name(words_on_first_page, reportName)
+
+        if matching_words_from_urls != []:
+            return concat_words(matching_words_from_file_name)
+
+    if matching_words_from_urls != []:
+        return concat_words(matching_words_from_urls)
 
 
 
 
 
-    return "found " + str(possible_names) + " but none could be verified"
+
+
+
+    return "found " + str(words_on_first_page) + " but none could be verified"
 def main():
     configurationFile = open("configuration.txt", "r")
     subscription_key = configurationFile.readline().rstrip("\n\r")
@@ -153,13 +208,14 @@ def main():
 
 
     files = glob.glob("reports/*.pdf")
+    print(files)
 
-    # for file in files:
-    #     print(file)
-    #     print(readReport(file))
-    #     print("\n-----------------------------------------------------\n")
+    for file in files:
+        print(file)
+        print(readReport(file))
+        print("\n-----------------------------------------------------\n")
 
-    print(readReport("reports/271083-FB-Annual-Report-PROOF3.pdf"))
+    # print("output " + readReport("reports/271083-FB-Annual-Report-PROOF3.pdf"))
 
 
 
