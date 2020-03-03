@@ -195,6 +195,8 @@ def readReport(reportName):
 
 
     return "found " + str(words_on_first_page) + " but none could be verified"
+
+
 def main():
     configurationFile = open("configuration.txt", "r")
     subscription_key = configurationFile.readline().rstrip("\n\r")
@@ -206,14 +208,13 @@ def main():
 
 
 
-
-    files = glob.glob("reports/*.pdf")
-    print(files)
-
-    for file in files:
-        print(file)
-        print(readReport(file))
-        print("\n-----------------------------------------------------\n")
+    # files = glob.glob("reports/*.pdf")
+    # # print(files)
+    #
+    # for file in files:
+    #     print(file)
+    #     print(readReport(file))
+    #     print("\n-----------------------------------------------------\n")
 
     # print("output " + readReport("reports/271083-FB-Annual-Report-PROOF3.pdf"))
 
@@ -221,7 +222,13 @@ def main():
 
 
 
+    images = Model.pdfsIterator(["reports/EDUCO-Accountability-Report-2018.pdf"])
 
+    text = ""
+    for img in images[0]:
+        for item in getTextFromImage(img):
+            text += item + " "
+    print(text.replace("\"","'"))
 
 
 
