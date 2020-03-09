@@ -174,7 +174,7 @@ def readReport(reportName):
 
 
 
-    print(words_on_first_page)
+    # print(words_on_first_page)
 
     matching_words_from_urls = get_matching_words_from_urls(images, words_on_first_page)
 
@@ -208,13 +208,13 @@ def main():
 
 
 
-    # files = glob.glob("reports/*.pdf")
-    # # print(files)
-    #
-    # for file in files:
-    #     print(file)
-    #     print(readReport(file))
-    #     print("\n-----------------------------------------------------\n")
+    files = glob.glob("reports/*.pdf")
+    # print(files)
+
+    for file in files:
+        print(file)
+        print(readReport(file))
+        print("\n-----------------------------------------------------\n")
 
     # print("output " + readReport("reports/271083-FB-Annual-Report-PROOF3.pdf"))
 
@@ -222,13 +222,13 @@ def main():
 
 
 
-    images = Model.pdfsIterator(["reports/EDUCO-Accountability-Report-2018.pdf"])
-
-    text = ""
-    for img in images[0]:
-        for item in getTextFromImage(img):
-            text += item + " "
-    print(text.replace("\"","'"))
+    # images = Model.pdfsIterator(["reports/EDUCO-Accountability-Report-2018.pdf"])
+	#
+    # text = ""
+    # for img in images[0]:
+    #     for item in getTextFromImage(img):
+    #         text += item + " "
+    # print(text.replace("\"","'"))
 
 
 

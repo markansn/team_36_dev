@@ -4,6 +4,7 @@
     <list default="true" id="905288a1-cbdc-4271-8728-fa3fcbc6dcf7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database_1/db_sql_v1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Database_1/db_sql_v1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HandleDictionary.py" beforeDir="false" afterPath="$PROJECT_DIR$/HandleDictionary.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HandleTables.py" beforeDir="false" afterPath="$PROJECT_DIR$/HandleTables.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/getNGODetails.py" beforeDir="false" afterPath="$PROJECT_DIR$/getNGODetails.py" afterDir="false" />
     </list>
@@ -14,28 +15,29 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/team_36_dev$HandleTables.coverage" NAME="HandleTables Coverage Results" MODIFIED="1582632809208" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/team_36_dev$HandleTables.coverage" NAME="HandleTables Coverage Results" MODIFIED="1583687287752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/team_36_dev$testSuite.coverage" NAME="testSuite Coverage Results" MODIFIED="1580917015620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/team_36_dev$Controller.coverage" NAME="Controller Coverage Results" MODIFIED="1581539757759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/team_36_dev$getNGODetails.coverage" NAME="getNGODetails Coverage Results" MODIFIED="1583168856849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/team_36_dev$getNGODetails.coverage" NAME="getNGODetails Coverage Results" MODIFIED="1583507782802" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="-1130924189">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="json" value="1" />
           <entry key="pickle" value="7" />
-          <entry key="py" value="19" />
+          <entry key="py" value="20" />
           <entry key="txt" value="2" />
         </counts>
       </usages-collector>
@@ -43,19 +45,19 @@
         <counts>
           <entry key="JSON" value="1" />
           <entry key="PLAIN_TEXT" value="9" />
-          <entry key="Python" value="19" />
+          <entry key="Python" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="46" />
-          <entry key="py" value="7646" />
+          <entry key="py" value="8742" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="46" />
-          <entry key="Python" value="7646" />
+          <entry key="Python" value="8742" />
         </counts>
       </usages-collector>
     </session>
@@ -65,11 +67,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2754">
-              <caret line="162" column="40" selection-start-line="162" selection-start-column="29" selection-end-line="162" selection-end-column="40" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="51">
+              <caret line="3" column="7" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -80,10 +79,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Controller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="27" column="21" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="21" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testSuite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="553">
-              <caret line="48" selection-start-line="48" selection-end-line="48" />
+            <state relative-caret-position="935">
+              <caret line="55" column="78" selection-start-line="55" selection-start-column="74" selection-end-line="55" selection-end-column="78" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <marker date="1582563684629" expanded="true" signature="96:436" ph="..." />
@@ -93,17 +104,17 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/getNGODetails.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="232" lean-forward="true" selection-start-line="232" selection-end-line="232" />
+            <state relative-caret-position="2018">
+              <caret line="215" column="31" selection-start-line="215" selection-start-column="30" selection-end-line="215" selection-end-column="31" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
-                <marker date="1583168856815" expanded="true" signature="877:920" ph="..." />
-                <marker date="1583168856815" expanded="true" signature="947:1037" ph="..." />
-                <marker date="1583168856815" expanded="true" signature="1062:1136" ph="..." />
-                <marker date="1583168856815" expanded="true" signature="4309:4402" ph="..." />
+                <marker date="1583507782795" expanded="true" signature="877:920" ph="..." />
+                <marker date="1583507782795" expanded="true" signature="947:1037" ph="..." />
+                <marker date="1583507782795" expanded="true" signature="1062:1136" ph="..." />
+                <marker date="1583507782795" expanded="true" signature="4309:4402" ph="..." />
               </folding>
             </state>
           </provider>
@@ -113,7 +124,7 @@
         <entry file="file://$PROJECT_DIR$/getFiles.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="5" column="13" lean-forward="true" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="57" />
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="57" />
               <folding>
                 <marker date="1582550047954" expanded="true" signature="5023:5024" ph="..." />
               </folding>
@@ -121,11 +132,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HandleTables.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-13">
-              <caret line="33" column="44" lean-forward="true" selection-start-line="33" selection-start-column="44" selection-end-line="33" selection-end-column="44" />
+            <state relative-caret-position="497">
+              <caret line="68" column="8" selection-start-line="67" selection-end-line="68" selection-end-column="8" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
               </folding>
@@ -136,7 +147,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file:///usr/local/lib/python3.7/site-packages/requests/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5219">
+            <state relative-caret-position="4743">
               <caret line="312" selection-start-line="312" selection-end-line="312" />
             </state>
           </provider>
@@ -145,8 +156,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HandleDictionary.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="57" column="61" selection-start-line="57" selection-start-column="61" selection-end-line="57" selection-end-column="61" />
+            <state relative-caret-position="1258">
+              <caret line="74" selection-start-line="74" selection-end-line="74" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -181,6 +192,10 @@
       <find>@</find>
       <find>africa</find>
       <find>possible_names</find>
+      <find>glob</find>
+      <find>pickle</find>
+      <find>pick</find>
+      <find>pickl</find>
     </findStrings>
     <replaceStrings>
       <replace>HandleDictionary</replace>
@@ -194,7 +209,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/PickleDict.py" />
-        <option value="$PROJECT_DIR$/HandleDictionary.py" />
         <option value="$PROJECT_DIR$/Controller.py" />
         <option value="$PROJECT_DIR$/TrainingInputFolder/getNGODetails.py" />
         <option value="$PROJECT_DIR$/getDetails.py" />
@@ -202,8 +216,9 @@
         <option value="$PROJECT_DIR$/allEnglishWords.txt" />
         <option value="$PROJECT_DIR$/getFiles.py" />
         <option value="$PROJECT_DIR$/testSuite.py" />
-        <option value="$PROJECT_DIR$/HandleTables.py" />
+        <option value="$PROJECT_DIR$/HandleDictionary.py" />
         <option value="$PROJECT_DIR$/getNGODetails.py" />
+        <option value="$PROJECT_DIR$/HandleTables.py" />
       </list>
     </option>
   </component>
@@ -213,7 +228,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="53" />
     <option name="width" value="1680" />
     <option name="height" value="1027" />
@@ -275,6 +290,11 @@
             <path>
               <item name="team_36_dev" type="b2602c69:ProjectViewProjectNode" />
               <item name="team_36_dev" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="team_36_dev" type="b2602c69:ProjectViewProjectNode" />
+              <item name="team_36_dev" type="462c0819:PsiDirectoryNode" />
               <item name="TrainingInputFolder" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -285,6 +305,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
   </component>
   <component name="RecentsManager">
@@ -311,7 +332,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.getNGODetails">
+  <component name="RunManager" selected="Python.HandleTables">
     <configuration name="Controller" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -408,8 +429,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.getNGODetails" />
         <item itemvalue="Python.HandleTables" />
+        <item itemvalue="Python.getNGODetails" />
         <item itemvalue="Python.Controller" />
         <item itemvalue="Python.testSuite" />
       </list>
@@ -438,21 +459,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="53" width="1680" height="1027" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22771673" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26373628" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30588236" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.30588236" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3284974" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32834226" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3284974" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.32834226" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.30695188" />
@@ -484,27 +504,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/lib/python3.7/site-packages/requests/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5219">
-          <caret line="312" selection-start-line="312" selection-end-line="312" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/squad/dev-v2.1.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-571">
-          <caret line="27" column="21" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -515,20 +518,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HandleDictionary.py">
+    <entry file="file://$PROJECT_DIR$/allEnglishWords.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="57" column="61" selection-start-line="57" selection-start-column="61" selection-end-line="57" selection-end-column="61" />
+        <state relative-caret-position="522">
+          <caret line="466551" selection-start-line="466551" selection-end-line="466551" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="7" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configuration.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="21" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="21" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testSuite.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="553">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
+        <state relative-caret-position="935">
+          <caret line="55" column="78" selection-start-line="55" selection-start-column="74" selection-end-line="55" selection-end-column="78" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
             <marker date="1582563684629" expanded="true" signature="96:436" ph="..." />
@@ -537,56 +557,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/allEnglishWords.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="466551" selection-start-line="466551" selection-end-line="466551" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/configuration.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2754">
-          <caret line="162" column="40" selection-start-line="162" selection-start-column="29" selection-end-line="162" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HandleTables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-13">
-          <caret line="33" column="44" lean-forward="true" selection-start-line="33" selection-start-column="44" selection-end-line="33" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/getFiles.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="5" column="13" lean-forward="true" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="57" />
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="57" />
           <folding>
             <marker date="1582550047954" expanded="true" signature="5023:5024" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/requests/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4743">
+          <caret line="312" selection-start-line="312" selection-end-line="312" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HandleDictionary.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1258">
+          <caret line="74" selection-start-line="74" selection-end-line="74" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/getNGODetails.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="232" lean-forward="true" selection-start-line="232" selection-end-line="232" />
+        <state relative-caret-position="2018">
+          <caret line="215" column="31" selection-start-line="215" selection-start-column="30" selection-end-line="215" selection-end-column="31" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
-            <marker date="1583168856815" expanded="true" signature="877:920" ph="..." />
-            <marker date="1583168856815" expanded="true" signature="947:1037" ph="..." />
-            <marker date="1583168856815" expanded="true" signature="1062:1136" ph="..." />
-            <marker date="1583168856815" expanded="true" signature="4309:4402" ph="..." />
+            <marker date="1583507782795" expanded="true" signature="877:920" ph="..." />
+            <marker date="1583507782795" expanded="true" signature="947:1037" ph="..." />
+            <marker date="1583507782795" expanded="true" signature="1062:1136" ph="..." />
+            <marker date="1583507782795" expanded="true" signature="4309:4402" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HandleTables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="68" column="8" selection-start-line="67" selection-end-line="68" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
           </folding>
         </state>
       </provider>
