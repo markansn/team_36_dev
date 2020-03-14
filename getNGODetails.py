@@ -4,6 +4,9 @@ import json
 import string
 from io import BytesIO
 from PIL import Image
+import pickle
+import pymysql
+from tqdm import tqdm
 # import nltk
 # from nltk.corpus import words as nltk_words
 # nltk.download('words')
@@ -21,6 +24,14 @@ from PIL import Image
 setofwords = set(line.strip() for line in open(
 	'allEnglishWords.txt'))  # credit https://stackoverflow.com/questions/874017/python-load-words-from-file-into-a-set
 punctuation = str.maketrans(dict.fromkeys(string.punctuation)) #credit https://stackoverflow.com/questions/265960/best-way-to-strip-punctuation-from-a-string
+
+
+connection = pymysql.connect(host='ancssc-db.mysql.database.azure.com',
+                             user='ancssc@ancssc-db',
+                             password='819UiC@Uj&$Z^GY',
+                             db='team_36_db_do_not_touch',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
 
 
 
@@ -183,14 +194,14 @@ def readReport(reportName):
 		matching_words_from_file_name = get_matching_words_from_file_name(words_on_first_page, reportName)
 
 		if matching_words_from_urls != []:
-			return concat_words(matching_words_from_file_name)
+			return concat_words(matching_words_from_file_name), words_on_first_page
 
 	if matching_words_from_urls != []:
-		return concat_words(matching_words_from_urls)
+		return concat_words(matching_words_from_urls), words_on_first_page
 
 
 
-	return ""
+	return "none", words_on_first_page
 
 
 
@@ -198,6 +209,18 @@ def readReport(reportName):
 
 
 	# return "found " + str(words_on_first_page) + " but none could be verified"
+
+
+def upload_pdf(file, answer):
+	try:
+		with connection.cursor() as cursor:
+			# Create a new record
+			sql = "INSERT INTO `pdfs` (`PDF_NAME`, `NGO_NAME`) VALUES (%s, %s)"
+			cursor.execute(sql, (file, answer))
+		connection.commit()
+
+	except:
+		print("ERR")
 
 
 def main():
@@ -211,13 +234,33 @@ def main():
 
 
 
-	files = glob.glob("reports/*.pdf")
-	# print(files)
+	# files = glob.glob("reports/*.pdf")
+	# # print(files)
+	# data = {}
+	# for file in files:
+	# 	print(file)
+	# 	name, output = readReport(file)
+	# 	data[file.replace("reports/", "")] = [name, output]
+	#
+	# 	# answer = input("\n")
+	# 	#
+	# 	# if answer == "":
+	# 	# 	upload_pdf(file.replace("reports/", ""), name)
+	# 	# elif answer == "a":
+	# 	# 	print(output)
+	# 	# 	answer = input("\n")
+	# 	# 	upload_pdf(file.replace("reports/", ""), answer)
+	# 	# else:
+	# 	# 	upload_pdf(file.replace("reports/", ""), answer)
+	#
+	#
+	#
+	# 	print("\n-----------------------------------------------------\n")
+	#
+	# with open("data.pickle", 'wb') as handle:
+	# 	pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-	for file in files:
-		print(file)
-		print(readReport(file))
-		print("\n-----------------------------------------------------\n")
+
 
 	# print("output " + readReport("reports/271083-FB-Annual-Report-PROOF3.pdf"))
 
@@ -233,7 +276,76 @@ def main():
 	#         text += item + " "
 	# print(text.replace("\"","'"))
 
+	with open("data.pickle", 'rb') as handle:
+		p = pickle.load(handle)
+	#
+	# for item in p:
+	#
+	#
+	# 	name = p[item][0]
+	# 	words = p[item][1]
+	#
+	# 	answer = "-"
+	# 	out = name
+	# 	print(item)
+	# 	print(name)
+	# 	while answer != "":
+	# 		if answer == "a":
+	# 			print(words)
+	# 		elif answer == "n":
+	# 			break
+	# 		elif answer != "-":
+	# 			out = answer
+	# 			break
+	# 		answer = input("")
+	#
+	# 	if answer != "n":
+	# 		upload_pdf(item, out)
+
+	with connection.cursor() as cursor:
+		# Read a single record
+		sql = "SELECT `PDF_NAME` FROM `pdfs`"
+		cursor.execute(sql)
+		result = cursor.fetchall()
+		# print(result)
+
+	results  = []
+	for r in result:
+		results.append(r["PDF_NAME"])
+
+	# for a in results:
+	# 	if a not in p:
+	# 		print(a)
+	#
+	# 		for item in p:
+	# 			if a in item:
+	# 				print("!!" + item)
+	for item in p:
+		if item not in results:
+			name = p[item][0]
+			words = p[item][1]
+
+			answer = "-"
+			out = name
+			print(item)
+			print(name)
+			while answer != "":
+				if answer == "a":
+					print(words)
+				elif answer == "n":
+					break
+				elif answer != "-":
+					out = answer
+					break
+				answer = input("")
+
+			if answer != "n":
+				upload_pdf(item, out)
 
 
+
+
+
+	connection.close()
 main()
 

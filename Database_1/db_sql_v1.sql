@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS `Challanges_And_Solutions`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+-- Buffer for signup - record deleted after full signup occurs
 CREATE TABLE IF NOT EXISTS `Partial_Signup` (
 	`ID` int NOT NULL AUTO_INCREMENT,
 	`NGO_NAME` varchar(40) NOT NULL,
