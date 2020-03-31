@@ -20,7 +20,7 @@ COMMIT;
 
 BEGIN;
 INSERT INTO Contact_Info (PROJECT_ID, CONTACT_ORG_NAME, PERSON_NAME, JOB_TITLE, EMAIL, MAILING_ADDRESS)
-	VALUES(1, 'example ngo - us headquarters', 'mary', 'head of communications', 'mary@examplengo.net', 'example ngo headquarters, 44 fake street, los angeles, texas, US')
+	VALUES(1, 'example ngo - us headquarters', 'mary', 'head of communications', 'mary@examplengo.net', 'example ngo headquarters, 44 fake street, los angeles, texas, US');
 COMMIT;
 
 
@@ -30,7 +30,7 @@ SELECT proj.`TITLE`
 	where ngo.`NGO_NAME` = 'example ngo'
 
 
-SELECT c.PERSON_NAME, c.DETAILS
+SELECT c.PERSON_NAME, c.EMAIL
 	from Contact_Info c 
 	join Projects p on p.`ID` = c.`PROJECT_ID`
 	where p.`TITLE` = 'teaching people with diabetes to do handstands'

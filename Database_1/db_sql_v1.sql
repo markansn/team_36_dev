@@ -216,7 +216,16 @@ CREATE TABLE IF NOT EXISTS `Challanges_And_Solutions` (
 
 );
 
+CREATE TABLE IF NOT EXISTS `Comments` (
+	`ID` int NOT NULL AUTO_INCREMENT,
+	`NGO_ID` int NOT NULL,
+	`COMMENT` varchar(255) NOT NULL,
+	
 
+	PRIMARY KEY (ID),
+	FOREIGN KEY (NGO_ID) REFERENCES  NGO(NGO_ID)
+
+);
 
 
 

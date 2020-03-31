@@ -28,6 +28,8 @@ def readReport(reportName):
 	print("----------------------------\n" + reportName + "\n----------------------------\n")
 	for table in df:
 
+		print(table)
+
 
 		cols = table.columns.tolist()
 		rows = table.values.tolist()
@@ -89,9 +91,9 @@ def main():
 	pd.set_option('display.max_columns', 300)
 	files = glob.glob("reports/*.pdf")
 
-	for file in files:
-		readReport(file)
-	# readReport("reports/tanzania-2018.pdf")
+	# for file in files:
+	# 	readReport(file)
+	readReport("reports left to do/tanzania-2018.pdf")
 
 
 

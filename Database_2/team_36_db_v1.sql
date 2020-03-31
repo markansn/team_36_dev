@@ -10,3 +10,11 @@ CREATE TABLE IF NOT EXISTS `Organisation` (
   PRIMARY KEY (ANCSSC_ID)
 );
 
+
+CREATE TABLE IF NOT EXISTS `ngo` (
+  `ID` int NOT NULL,
+  `NAME` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (ID)
+);
+
+
