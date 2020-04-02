@@ -1,0 +1,166 @@
+CREATE TABLE `budget` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PROJECT_ID` int(11) NOT NULL,
+  `TYPE` int(11) DEFAULT NULL,
+  `STATUS` int(11) DEFAULT NULL,
+  `PERIOD_START` date DEFAULT NULL,
+  `PERIOD_END` date DEFAULT NULL,
+  `VALUE` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `CURRENCY` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `VALUE_DATE` date DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PROJECT_ID` (`PROJECT_ID`),
+  CONSTRAINT `budget_ibfk_1` FOREIGN KEY (`PROJECT_ID`) REFERENCES `projects` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `challanges_and_solutions` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PROJECT_ID` int(11) NOT NULL,
+  `CHALLANGE_TITLE` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `CHALLENGE_STATUS` int(11) NOT NULL,
+  `CHALLENGE_TYPE` int(11) NOT NULL,
+  `CHALENGE_DESCRIPTION` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `SOLUTION_TYPE` int(11) DEFAULT NULL,
+  `SOLUTION_DESCRIPTION` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `CAN_BE_CONTRACTED` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PROJECT_ID` (`PROJECT_ID`),
+  CONSTRAINT `challanges_and_solutions_ibfk_1` FOREIGN KEY (`PROJECT_ID`) REFERENCES `projects` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `classifications` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PROJECT_ID` int(11) NOT NULL,
+  `SECTOR` int(11) NOT NULL,
+  `SECTOR_PERCENTAGE` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PROJECT_ID` (`PROJECT_ID`),
+  CONSTRAINT `classifications_ibfk_1` FOREIGN KEY (`PROJECT_ID`) REFERENCES `projects` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `contact_info` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PROJECT_ID` int(11) NOT NULL,
+  `CONTACT_ORG_NAME` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `DEPARTMENT` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `PERSON_NAME` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `JOB_TITLE` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `TEL` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `EMAIL` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `WEBSITE` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `MAILING_ADDRESS` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PROJECT_ID` (`PROJECT_ID`),
+  CONSTRAINT `contact_info_ibfk_1` FOREIGN KEY (`PROJECT_ID`) REFERENCES `projects` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `coordinates` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `LAT` int(11) NOT NULL,
+  `LONG` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `geo_info` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PROJECT_ID` int(11) NOT NULL,
+  `COUNTRY` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `RECIPIENT_REGION` int(11) NOT NULL,
+  `COORDINATES_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PROJECT_ID` (`PROJECT_ID`),
+  KEY `COORDINATES_ID` (`COORDINATES_ID`),
+  CONSTRAINT `geo_info_ibfk_1` FOREIGN KEY (`PROJECT_ID`) REFERENCES `projects` (`ID`),
+  CONSTRAINT `geo_info_ibfk_2` FOREIGN KEY (`COORDINATES_ID`) REFERENCES `coordinates` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `ngo` (
+  `NGO_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `IATI_ID` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `REPORTING_ORG` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `NGO_NAME` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `NGO_SINCE` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `USERNAME` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `PASSWORD` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `REGION` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `STREET_ADDRESS` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `POST_OR_ZIP` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `PHONE` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `CONTACT_NAME` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `MEMBER_SINCE` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `COMPLETED_PROJECTS` int(11) DEFAULT NULL,
+  `TOTAL_PROJECTS` int(11) NOT NULL,
+  `HEADCOUNT` int(11) NOT NULL,
+  `FOCUS_AREA` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `NUM_OF_ACTIVE_VOLUNTEERS` int(11) DEFAULT NULL,
+  `WEBSITE` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`NGO_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `partial_signup` (
+  `ID` int(11) NOT NULL,
+  `NGO_NAME` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `USERNAME` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `PASSWORD` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `participating_organisation` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PROJECT_ID` int(11) NOT NULL,
+  `NAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `NGO_NAME` int(11) NOT NULL,
+  `ROLE` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PROJECT_ID` (`PROJECT_ID`),
+  CONSTRAINT `participating_organisation_ibfk_1` FOREIGN KEY (`PROJECT_ID`) REFERENCES `projects` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `project_impact` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PROJECT_ID` int(11) NOT NULL,
+  `PROJECT_REACH_UNIT` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `PROJECT_REACH_TARGET` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `PROJECT_REACH_ACTUAL` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `TARGET_GROUPS` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PROJECT_ID` (`PROJECT_ID`),
+  CONSTRAINT `project_impact_ibfk_1` FOREIGN KEY (`PROJECT_ID`) REFERENCES `projects` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `projects` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NGO_ID` int(11) NOT NULL,
+  `TITLE` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `DESCRIPTION` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `STATUS` int(11) NOT NULL,
+  `START_DATE` date NOT NULL,
+  `END_DATE` date NOT NULL,
+  `SCOPE` int(11) NOT NULL,
+  `PROJECT_SUMMARY` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `SDGs` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `NGO_ID` (`NGO_ID`),
+  CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`NGO_ID`) REFERENCES `ngo` (`NGO_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `statistics` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NGO_ID` int(11) NOT NULL,
+  `AVG_PROJECT_BUDGET` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `AVERAGE_COMPLETION` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `PER_REGION` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `NGO_ID` (`NGO_ID`),
+  CONSTRAINT `statistics_ibfk_1` FOREIGN KEY (`NGO_ID`) REFERENCES `ngo` (`NGO_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `tags` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CLASSIFICATIONS_ID` int(11) NOT NULL,
+  `TAG` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `CLASSIFICATIONS_ID` (`CLASSIFICATIONS_ID`),
+  CONSTRAINT `tags_ibfk_1` FOREIGN KEY (`CLASSIFICATIONS_ID`) REFERENCES `classifications` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
